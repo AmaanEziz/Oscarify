@@ -36,3 +36,31 @@ input[type=text], textarea {
 	font-family: 'Comfortaa', cursive;
 }
 
+img{
+	width: 200px;
+	height: 300px;
+}
+
+table td:hover{
+	background: rgba(2,179,228,0.8);
+	color: #fff;
+}
+table td{
+	border-radius: 8px;
+}
+
+table th:hover{
+	color: #fff;
+	background: rgba(2,179,228,0.8);
+	border-radius: 100px;
+}
+input[type=text]:focus, textarea:focus {
+	-webkit-transition: all 0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  -ms-transition: all 0.30s ease-in-out;
+  -o-transition: all 0.30s ease-in-out;
+  margin: 20px 1px 3px 0px;
+	border: 1px solid white;
+	font-family: 'Comfortaa', cursive;
+}
+
