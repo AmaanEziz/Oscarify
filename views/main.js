@@ -14,10 +14,6 @@
 				});
 			});
 		}
-<<<<<<< HEAD
-
-=======
->>>>>>> a03dba27b8bc22a792a70cc07ace72cf74c8e4ff
 		function _filter(row) {
 			var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
 			row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
@@ -32,9 +28,5 @@
 		};
 	});
 
-<<<<<<< HEAD
 	// testing  stuff
 })(document);
-=======
-})(document);
->>>>>>> a03dba27b8bc22a792a70cc07ace72cf74c8e4ff
