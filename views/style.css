@@ -92,7 +92,6 @@ input[type=text]:focus, textarea:focus {
 	  color: #3d3b3b;
   }
 
-<<<<<<< HEAD
   .container table {
 	margin-top: 40px;
 	width: 100%;
@@ -115,27 +114,3 @@ input[type=text]:focus, textarea:focus {
 	border-bottom: 1px solid #ddd;
 	position: relative;
 	}
-=======
-.container table {
-	margin-top: 40px;
-  width: 100%;
-}
-
-.container td, .container th {
-  padding: 10px;
-	
-}
-
-.container td:first-child, .container th:first-child {
-  padding-left: 20px;
-}
-
-.container td:last-child, .container th:last-child {
-  padding-right: 20px;
-}
-
-.container th {
-  border-bottom: 1px solid #ddd;
-  position: relative;
-}
->>>>>>> a03dba27b8bc22a792a70cc07ace72cf74c8e4ff
