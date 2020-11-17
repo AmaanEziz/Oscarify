@@ -1,0 +1,17 @@
+{
+  "name": "movie",
+  "version": "1.0.0",
+  "description": "Simple web app based on OMDb API to search movies.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Group 5 (S7)",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "request": "^2.87.0"
+  }
+}
