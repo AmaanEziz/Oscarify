@@ -3,7 +3,6 @@ const request = require('request');
 const bodyParser = require('body-parser');
 
 
-
 const app = express();
 app.use(bodyParser.json());
 app.use(express.json());
@@ -31,8 +30,7 @@ Papa.parse(file, {
 
 // Get request for UI search PAGE
 
-app.get('/search', (req, res) => {
-    if(req.year)
+app.get('/', (req, res) => {
     res.render('search');
 });
 
