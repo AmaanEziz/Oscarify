@@ -1,42 +1,21 @@
-const express = require('express');
+const express=require('express');
+const fetch = require("node-fetch");
 const request = require('request');
 const bodyParser = require('body-parser');
 
-
 const app = express();
+
 app.use(bodyParser.json());
 app.use(express.json());
-app.set('view engine', 'ejs');           // set view engine for ejs 
+app.set('view engine', 'ejs');  
 
-app.listen(8080, () => {
-    console.log('Movie app started on port: 8080');
-});
-
-// read Oscar CSV file
-const fs = require('fs');
-const Papa = require('papaparse');
-const csvFilePath = 'the_oscar_award.csv'
-const file = fs.createReadStream(csvFilePath);
-
-const Oscar_record = [];
-Papa.parse(file, {
-  header: true,
-  transformHeader: header => header.trim(),
-  step: function(result) {
-    Oscar_record.push(result.data)
-  }
-});
-
-
-// Get request for UI search PAGE
-
+// get param from UI (Search Page)
 app.get('/', (req, res) => {
     res.render('search');
 });
 
 // making get request for Result page to print out data to UI
 app.get('/result', (req, res) => {
-
     var query = req.query.search;
     var url = 'https://www.omdbapi.com/?s=' + query + '&apikey=35711dae';
     request(url, (error, response, body) => {
@@ -44,11 +23,14 @@ app.get('/result', (req, res) => {
             var data = JSON.parse(body)
             console.log(data);
             res.render('result', {data: data});
-            console.log(data["Search"][0]["Title"]);
-            console.log(data["Search"][0]["Year"]);
         }
     });
 });
+
+
+
+
+
 
 // Creat call OMDB API
 const getMovieData = async (movie) => {
