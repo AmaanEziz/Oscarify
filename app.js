@@ -64,6 +64,49 @@ const getMovieData = async (movie) => {
     }
 };
 
+//get data form Oscar.json file
+const Oscar_record = require('./oscars.json');
+
+// making function to return Singleton index movie
+
+function getMovieByIndex(number){
+
+    let filmname= Oscar_record[number].film;
+    try {
+        return getMovieData(filmname).then((data)=>{return data}); 
+    } catch (error) {
+        return error;
+    }
+}
+
+// maknig function to return movies collection by Oscar Category
+
+async function getMoviesByCategory(category, year){
+
+    var movies_list =  [];
+    for( var i = 0; i < Oscar_record.length; i++ ){
+
+      var categorystring = Oscar_record[i].category.replace(/\s/g, '');  // to read white space for Json data
+      var catergory_param = category.toUpperCase().replace(/\s/g, '');   // to convert param toUppercase and read space
+
+      if(categorystring == catergory_param && Oscar_record[i].year_ceremony == year) {
+
+        let OMDPinfo= await getMovieData(Oscar_record[i].film).then((data)=>{return data;});    // calling getMoviesData to get data from OMDB API
+
+        let Oscar_dataset = Oscar_record[i];
+        delete Oscar_dataset.ceremony;    
+        delete Oscar_dataset.name;
+
+        Oscar_dataset.imdbLink = OMDPinfo.IMDBReviewsLink;
+        Oscar_dataset.streamingLink = OMDPinfo.StreamingLink;
+        movies_list.push(Oscar_dataset);
+     } else {
+         return "There are no Oscar_reacord OR the enterd infomation is not correct!";
+     }
+    }
+    return movies_list;
+  }
+
 // making get request to Postman at endpoint http://localhost:8080/movies?category=actor&year_film=1927&winner=true
 // Get single movies
 app.get('/movies', (req, res) => {
