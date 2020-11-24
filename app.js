@@ -107,6 +107,16 @@ async function getMoviesByCategory(category, year){
     return movies_list;
   }
 
+  // SINGLETON: request by movie index
+app.get('/movies/:index',(req,res)=>{ 
+    getMovieByIndex(req.params.index)
+    .then(data => {
+        console.log(data);
+        res.send(data);
+    })
+
+});
+
 // making get request to Postman at endpoint http://localhost:8080/movies?category=actor&year_film=1927&winner=true
 // Get single movies
 app.get('/movies', (req, res) => {
