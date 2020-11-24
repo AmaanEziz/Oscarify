@@ -50,6 +50,19 @@ app.get('/result', (req, res) => {
     });
 });
 
+// Creat call OMDB API
+const getMovieData = async (movie) => {
+    try {
+      var moviename = movie.toString().replace(/ /g,"+");
+      const response = await fetch("http://www.omdbapi.com/?t=" + moviename + "&apikey=47175bcf");
+      const json = await response.json();
+      json.IMDBReviewsLink="https://www.imdb.com/title/" + json.imdbID;
+      json.StreamingLink="https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id=" + json.imdbID;
+      return json;
+    } catch (error) {
+      return error;
+    }
+};
 
 // making get request to Postman at endpoint http://localhost:8080/movies?category=actor&year_film=1927&winner=true
 // Get single movies
