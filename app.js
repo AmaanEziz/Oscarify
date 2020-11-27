@@ -73,17 +73,42 @@ async function getOMDPdata(movie){//Gets ALL ODP info of a movie when given its 
     catch(error){return error;}
 }
 
-
+//Takes in an ODP object and trims the unnecessary info and adds streaming/review link
+function ReturnOnlyNeededInfo(movie){
+    delete movie.Year;
+    delete movie.Rated;
+    delete movie.Released;
+    delete movie.Runtime;
+    delete movie.Director;
+    delete movie.Writer;
+    delete movie.Actors;
+    delete movie.Metascore;
+    delete movie.imdbVotes;
+    delete movie.Awards;
+    delete movie.Type;
+    delete movie.DVD;
+    delete movie.BoxOffice;
+    delete movie.Production;
+    delete movie.Website;
+    delete movie.Ratings;
+    delete movie.Language;
+    delete movie.Country;
+    movie.IMDBReviewsLink="https://www.imdb.com/title/"+movie.imdbID;
+    movie.StreamingLink="https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id="+movie.imdbID;
+    return movie;
+}
 // making function to return Singleton index movie
 
-function getMovieByIndex(number){
-
-    let filmname= Oscar_record[number].film;
-    try {
-        return getMovieData(filmname).then((data)=>{return data}); 
-    } catch (error) {
-        return error;
-    }
+async function getDataAtIndex(index){ 
+    let movie=Oscar_record[index];
+    let MovieName=movie.film;
+    let ODPinfo=await getOMDPdata(MovieName).then((data)=>{return data;});
+    let neededInfo=await ReturnOnlyNeededInfo(ODPinfo);
+    neededInfo.Year_film = movie.year_film;
+    neededInfo.OscarCategory=movie.category;
+    neededInfo.Winner=movie.winner;
+    return await neededInfo;
+    
 }
 
 // maknig function to return movies collection by Oscar Category
