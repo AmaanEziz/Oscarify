@@ -9,6 +9,8 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.set('view engine', 'ejs');  
 
+app.listen(8080,()=>{console.log("listening on port 8080");});
+
 // get param from UI (Search Page)
 app.get('/', (req, res) => {
     res.render('search');
@@ -28,10 +30,6 @@ app.get('/result', (req, res) => {
 });
 
 
-
-
-
-
 // Creat call OMDB API
 const getMovieData = async (movie) => {
     try {
@@ -48,6 +46,33 @@ const getMovieData = async (movie) => {
 
 //get data form Oscar.json file
 const Oscar_record = require('./oscars.json');
+
+// creat categorylist object array store Oscar Movies detail base on Category
+var categorylist=[];
+    for (var i=0; i<Oscar_record.length;i++){
+        categorylist.push(Oscar_record[i].category.toString().replace(/ /g,"+"));
+    }
+
+// creat yearlist to store Oscar Movies detail base on Year
+var yearlist=[];
+    for (i=0; i<Oscar_record.length;i++){
+        yearlist.push(Oscar_record[i].year_film);
+    }
+
+// creat Winner to store Oscar Movies detail base on Year  
+var winnerlist=[];
+for (i=0; i<Oscar_record.length;i++){
+    winnerlist.push(Oscar_record[i].winner);
+}
+
+async function getOMDPdata(movie){//Gets ALL ODP info of a movie when given its title
+    try{
+    const response = await fetch("http://www.omdbapi.com/?t="+movie+"&apikey=47175bcf");
+    const ODPinfo = await response.json();
+    return await ODPinfo;}
+    catch(error){return error;}
+}
+
 
 // making function to return Singleton index movie
 
