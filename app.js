@@ -100,44 +100,81 @@ function ReturnOnlyNeededInfo(movie){
 // making function to return Singleton index movie
 
 async function getDataAtIndex(index){ 
-    let movie=Oscar_record[index];
-    let MovieName=movie.film;
-    let ODPinfo=await getOMDPdata(MovieName).then((data)=>{return data;});
-    let neededInfo=await ReturnOnlyNeededInfo(ODPinfo);
+    let movie = Oscar_record[index];
+    let MovieName = movie.film;
+    let ODPinfo = await getOMDPdata(MovieName).then((data)=>{return data;});            
+    let neededInfo = await ReturnOnlyNeededInfo(ODPinfo);
     neededInfo.Year_film = movie.year_film;
+    neededInfo.OscarCategory = movie.category;
+    neededInfo.Winner = movie.winner;
+    return await neededInfo;
+    
+}
+
+async function getDataAtIndex(index){ //Returns the Needed info given an Index of the oscars.json file
+    let movie=moviesArr[index];
+    let MovieName=movie.film;
+    let ODPinfo=await getODPdata(MovieName).then((data)=>{return data;});
+    let neededInfo=await ReturnOnlyNeededInfo(ODPinfo);
     neededInfo.OscarCategory=movie.category;
     neededInfo.Winner=movie.winner;
     return await neededInfo;
     
 }
 
-// maknig function to return movies collection by Oscar Category
-
-async function getMoviesByCategory(category, year){
-
-    var movies_list =  [];
-    for( var i = 0; i < Oscar_record.length; i++ ){
-
-      var categorystring = Oscar_record[i].category.replace(/\s/g, '');  // to read white space for Json data
-      var catergory_param = category.toUpperCase().replace(/\s/g, '');   // to convert param toUppercase and read space
-
-      if(categorystring == catergory_param && Oscar_record[i].year_ceremony == year) {
-
-        let OMDPinfo= await getMovieData(Oscar_record[i].film).then((data)=>{return data;});    // calling getMoviesData to get data from OMDB API
-
-        let Oscar_dataset = Oscar_record[i];
-        delete Oscar_dataset.ceremony;    
-        delete Oscar_dataset.name;
-
-        Oscar_dataset.imdbLink = OMDPinfo.IMDBReviewsLink;
-        Oscar_dataset.streamingLink = OMDPinfo.StreamingLink;
-        movies_list.push(Oscar_dataset);
-     } else {
-         return "There are no Oscar_reacord OR the enterd infomation is not correct!";
-     }
+async function getMovieList(firstlist,firstvalue,secondlist,secondvalue,thirdlist,thirdvalue){
+    let returnlist=[];
+    for (let i=0;i<firstlist.length;i++){
+        if (firstlist[i]==firstvalue&&secondlist[i]==secondvalue&&thirdlist[i]==thirdvalue){
+            let DataAtIndex= await getDataAtIndex(i).then((data)=>{return data;});
+            returnlist.push(DataAtIndex);
+        }
     }
-    return movies_list;
+    return await returnlist;
+}
+
+async function getDataAtCategory(category){ 
+    let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");//Makes sure spaces are replaced with + and its capitalized to avoid errors
+    return await getMovieList(categorylist,categoryvalue,[],null,[],null);
   }
+
+
+async function getDataAtYear(year){ 
+    return await getMovieList(yearlist,year,[],null,[],null);
+  }
+  async function getDataAtWinner(winner){ 
+    let winnervalue=winner.toString().toLowerCase();
+    return await getMovieList(winnerlist,winnervalue,[],null,[],null);
+    
+  }
+
+  async function getDataAtCategoryYear(category,year){ 
+    let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");
+    return await getMovieList(categorylist,categoryvalue,yearlist,year,[],null).then(data=>{return data;});
+    
+  }
+
+
+  async function getDataAtCategoryWinner(category,winner){ 
+    let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");
+    let winnervalue=winner.toString().toLowerCase();
+    return await getMovieList(categorylist,categoryvalue,winnerlist,winnervalue,[],null);
+    
+  }
+
+
+  async function getDataAtYearWinner(year,winner){ 
+    let winnervalue=winner.toString().toLowerCase();
+    return await getMovieList(yearlist,year,winnerlist,winnervalue,[],null);
+  }
+ 
+
+  async function getDataAtCategoryYearWinner(category,year,winner){ 
+    let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");
+    let winnervalue=winner.toString().toLowerCase();
+    return await getMovieList(categorylist,categoryvalue,yearlist,year,winnerlist,winnervalue);
+  }
+
 
   // SINGLETON: request by movie index
 app.get('/movies/:index',(req,res)=>{ 
