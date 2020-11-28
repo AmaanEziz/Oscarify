@@ -7,19 +7,27 @@
 	<h1 class ="text-center mt-4"> Results Page</h1>
 	<table border = "1" class ="text-center mt-4 center" >
 	  <tr>
-	    <th>Year</th>
-	    <th>Name</th>
-	    <th>Cover</th>
+		<th>Name</th>
+		<th>Year film</th>
+		<th>Year Ceremony</th>
 		<th>IMDB Link</th>
-		<th>Netflix Link</th>
+		<th>Streaming Link</th>
+		<th>Oscar Category</th>
+		<th>Winner</th>
+		<th>Cover</th>
 	  </tr>
 	  <% data['Search'].forEach(function(movie){ %>
 	  <tr>
-	    <% var imdb_url = 'https://www.imdb.com/title/' + movie['imdbID'] %>
-	    <td><%= movie['Year'] %></td>
-	    <td><%= movie['Title'] %></td>
-	    <td><img src="<%= movie['Poster'] %>" alt=""></td>
-	    <td><a href="<%= imdb_url %>">View on IMDB</a></td>
+		<% var imdb_url = 'https://www.imdb.com/title/' + movie['imdbID'] %>
+		<% var streamingLink = "https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id=" + movie['imdbID'] %>
+		<td><%= movie.Title %></td>
+		<td><%= movie.Year %></td>
+		<td><%= movie.year_ceremony %></td>      
+		<td><a href="<%= imdb_url %>">View on IMDB</a></td>
+		<td><a href="<%= streamingLink %>">Watch Now</a></td>
+		<td><%= movie.category %></td>
+		<td><%= movie.winner %></td>
+		<td><img src="<%= movie['Poster'] %>" alt=""></td>
 	  </tr>
 	  <% }) %>
 	</table>

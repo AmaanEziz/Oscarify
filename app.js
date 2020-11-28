@@ -4,6 +4,9 @@ const request = require('request');
 const bodyParser = require('body-parser');
 
 const app = express();
+//get data form Oscar.json file
+const Oscar_record = require('./oscars.json');
+
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -20,13 +23,29 @@ app.get('/', (req, res) => {
 app.get('/result', (req, res) => {
     var query = req.query.search;
     var url = 'https://www.omdbapi.com/?s=' + query + '&apikey=35711dae';
-    request(url, (error, response, body) => {
-        if(!error && response.statusCode == 200){
-            var data = JSON.parse(body)
-            console.log(data);
-            res.render('result', {data: data});
-        }
-    });
+    try {
+        request(url, (error, response, body) => {
+            if(!error && response.statusCode == 200){
+                var data = JSON.parse(body)
+                console.log(data.Search[0].Title);
+                for (var i = 0 ; i < Oscar_record.length; i++) {
+                    data.Search.forEach( movie => {
+                        var moviename = movie.Title;
+                        if (moviename == Oscar_record[i].film) {
+                            movie.winner = Oscar_record[i].winner;
+                            movie.category = Oscar_record[i].category;
+                            movie.year_ceremony = Oscar_record[i].year_ceremony;
+                        } 
+                    })
+                }
+                console.log(data);
+                res.render('result', {data: data});
+            }
+        });
+    }
+    catch (error) {
+        return error;
+    }
 });
 
 
@@ -44,8 +63,7 @@ const getMovieData = async (movie) => {
     }
 };
 
-//get data form Oscar.json file
-const Oscar_record = require('./oscars.json');
+
 
 // creat categorylist object array store Oscar Movies detail base on Category
 var categorylist=[];
@@ -100,27 +118,18 @@ function ReturnOnlyNeededInfo(movie){
 // making function to return Singleton index movie
 
 async function getMoviesByIndex(index){ 
-    let movie = Oscar_record[index];
-    let MovieName = movie.film;
-    let ODPinfo = await getOMDPdata(MovieName).then((data)=>{return data;});            
-    let neededInfo = await ReturnOnlyNeededInfo(ODPinfo);
-    neededInfo.Year_film = movie.year_film;
-    neededInfo.OscarCategory = movie.category;
-    neededInfo.Winner = movie.winner;
-    return await neededInfo;
-    
-}
-
-async function getMoviesByIndex(index){ //Returns the Needed info given an Index of the oscars.json file
-    let movie=moviesArr[index];
+    let movie=Oscar_record[index];
     let MovieName=movie.film;
-    let ODPinfo=await getODPdata(MovieName).then((data)=>{return data;});
+    let ODPinfo=await getOMDPdata(MovieName).then((data)=>{return data;});
     let neededInfo=await ReturnOnlyNeededInfo(ODPinfo);
+    neededInfo.Year_film = movie.year_film;
     neededInfo.OscarCategory=movie.category;
     neededInfo.Winner=movie.winner;
     return await neededInfo;
     
 }
+
+
 
 async function getMovieList(firstlist,firstvalue,secondlist,secondvalue,thirdlist,thirdvalue){
     let returnlist=[];
@@ -142,20 +151,21 @@ async function getMoviesByCategory(category){
 async function getMoviesByYear(year){ 
     return await getMovieList(yearlist,year,[],null,[],null);
   }
-  async function getMoviesByWinner(winner){ 
+
+async function getMoviesByWinner(winner){ 
     let winnervalue=winner.toString().toLowerCase();
     return await getMovieList(winnerlist,winnervalue,[],null,[],null);
     
   }
 
-  async function getMoviesByCategoryYear(category,year){ 
+async function getMoviesByCategoryYear(category,year){ 
     let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");
     return await getMovieList(categorylist,categoryvalue,yearlist,year,[],null).then(data=>{return data;});
     
   }
 
 
-  async function getMoviesByCategoryWinner(category,winner){ 
+async function getMoviesByCategoryWinner(category,winner){ 
     let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");
     let winnervalue=winner.toString().toLowerCase();
     return await getMovieList(categorylist,categoryvalue,winnerlist,winnervalue,[],null);
@@ -163,13 +173,13 @@ async function getMoviesByYear(year){
   }
 
 
-  async function getMoviesByYearWinner(year,winner){ 
+async function getMoviesByYearWinner(year,winner){ 
     let winnervalue=winner.toString().toLowerCase();
     return await getMovieList(yearlist,year,winnerlist,winnervalue,[],null);
   }
  
 
-  async function getMoviesByCategoryYearWinner(category,year,winner){ 
+async function getMoviesByCategoryYearWinner(category,year,winner){ 
     let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");
     let winnervalue=winner.toString().toLowerCase();
     return await getMovieList(categorylist,categoryvalue,yearlist,year,winnerlist,winnervalue);
@@ -178,54 +188,36 @@ async function getMoviesByYear(year){
 
   // SINGLETON: request by movie index
 app.get('/movies/:index',(req,res)=>{ 
-    getMovieByIndex(req.params.index)
+    getMoviesByIndex(req.params.index)
     .then(data => {
         console.log(data);
         res.send(data);
-    }, error => res.status(400).send(`error: ${error}`)
+    }), error => res.status(400).send(`error: ${error}`)
 
 });
 
-// making get request to Postman at endpoint http://localhost:8080/movies?category=actor&year_film=1927&winner=true
-// Get single movies
-app.get('/movies', (req, res) => {
 
-    if(req.query) {
-        Oscar_record.forEach ( (movies) =>{ 
-            if(req.query.category == movies.category &
-                req.query.year_film == movies.year_film &
-                req.query.winner == movies.winner)
-            {
-                // make OMDB API call to get IMDB link 
-                var url = 'https://www.omdbapi.com/?t=' + movies.film + '&apikey=35711dae';
-                request(url, (error, response, body) => {
-                    if(!error && response.statusCode == 200){
-                        var data = JSON.parse(body);
-                        var imdb_link = "https://www.imdb.com/title/" + data.imdbID;
-                        
-                        var movies_detail = {
-                            Title :  movies.film,
-                            Year :  movies.year_film,
-                            Oscar_category :  movies.category,
-                            Year_ceremony :  movies.year_ceremony,
-                            Imdb_link: imdb_link
-                            };
-                        
-                        console.log(movies_detail);
-                        res.status(200).json(movies_detail);    
-                    }
-                });  
-            }
-        });
-    } 
-    else {
+//collections request  By Category and year
+// test url : 
+
+app.get('/movies/collections/:category/:year',(req,res)=>{
+
+    let category =  req.params.category ;
+    let year = req.params.year;
+
+    getMoviesByCategoryYear(category,year)
+    .then(data => {
+        // console.log(data);
+        res.status(200).send(data)})
+    },  error => {
+        console.log(error);
         res.status(400).send(error.message);
-    }
-});
+    });
 
 
 
-// For Last endpoint /moives/search?category=Best Picture
+
+// For Last endpoint Picture http://localhost:8080/moives/search?category=Best Picture
 app.get('/movies/search',(req,res)=>{
     let category=req.query.category;
     let year=req.query.year;
