@@ -99,7 +99,7 @@ function ReturnOnlyNeededInfo(movie){
 }
 // making function to return Singleton index movie
 
-async function getDataAtIndex(index){ 
+async function getMoviesByIndex(index){ 
     let movie = Oscar_record[index];
     let MovieName = movie.film;
     let ODPinfo = await getOMDPdata(MovieName).then((data)=>{return data;});            
@@ -111,7 +111,7 @@ async function getDataAtIndex(index){
     
 }
 
-async function getDataAtIndex(index){ //Returns the Needed info given an Index of the oscars.json file
+async function getMoviesByIndex(index){ //Returns the Needed info given an Index of the oscars.json file
     let movie=moviesArr[index];
     let MovieName=movie.film;
     let ODPinfo=await getODPdata(MovieName).then((data)=>{return data;});
@@ -126,36 +126,36 @@ async function getMovieList(firstlist,firstvalue,secondlist,secondvalue,thirdlis
     let returnlist=[];
     for (let i=0;i<firstlist.length;i++){
         if (firstlist[i]==firstvalue&&secondlist[i]==secondvalue&&thirdlist[i]==thirdvalue){
-            let DataAtIndex= await getDataAtIndex(i).then((data)=>{return data;});
-            returnlist.push(DataAtIndex);
+            let MoviesByIndex= await getMoviesByIndex(i).then((data)=>{return data;});
+            returnlist.push(MoviesByIndex);
         }
     }
     return await returnlist;
 }
 
-async function getDataAtCategory(category){ 
+async function getMoviesByCategory(category){ 
     let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");//Makes sure spaces are replaced with + and its capitalized to avoid errors
     return await getMovieList(categorylist,categoryvalue,[],null,[],null);
   }
 
 
-async function getDataAtYear(year){ 
+async function getMoviesByYear(year){ 
     return await getMovieList(yearlist,year,[],null,[],null);
   }
-  async function getDataAtWinner(winner){ 
+  async function getMoviesByWinner(winner){ 
     let winnervalue=winner.toString().toLowerCase();
     return await getMovieList(winnerlist,winnervalue,[],null,[],null);
     
   }
 
-  async function getDataAtCategoryYear(category,year){ 
+  async function getMoviesByCategoryYear(category,year){ 
     let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");
     return await getMovieList(categorylist,categoryvalue,yearlist,year,[],null).then(data=>{return data;});
     
   }
 
 
-  async function getDataAtCategoryWinner(category,winner){ 
+  async function getMoviesByCategoryWinner(category,winner){ 
     let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");
     let winnervalue=winner.toString().toLowerCase();
     return await getMovieList(categorylist,categoryvalue,winnerlist,winnervalue,[],null);
@@ -163,13 +163,13 @@ async function getDataAtYear(year){
   }
 
 
-  async function getDataAtYearWinner(year,winner){ 
+  async function getMoviesByYearWinner(year,winner){ 
     let winnervalue=winner.toString().toLowerCase();
     return await getMovieList(yearlist,year,winnerlist,winnervalue,[],null);
   }
  
 
-  async function getDataAtCategoryYearWinner(category,year,winner){ 
+  async function getMoviesByCategoryYearWinner(category,year,winner){ 
     let categoryvalue=category.toString().toUpperCase().replace(/ /g,"+");
     let winnervalue=winner.toString().toLowerCase();
     return await getMovieList(categorylist,categoryvalue,yearlist,year,winnerlist,winnervalue);
@@ -182,7 +182,7 @@ app.get('/movies/:index',(req,res)=>{
     .then(data => {
         console.log(data);
         res.send(data);
-    })
+    }, error => res.status(400).send(`error: ${error}`)
 
 });
 
@@ -224,4 +224,36 @@ app.get('/movies', (req, res) => {
 });
 
 
+
+// For Last endpoint /moives/search?category=Best Picture
+app.get('/movies/search',(req,res)=>{
+    let category=req.query.category;
+    let year=req.query.year;
+    let winner=req.query.winner;
+    if (category && year && winner){
+        getMoviesByCategoryYearWinner(category,year,winner)
+        .then(data=>{res.send(data); console.log(data)} );
+    }
+    else if (category && year){
+        getMoviesByCategoryYear(category,year).then(data=>{res.send(data)})
+    }
+    else if (category && winner){
+        getMoviesByCategoryWinner(category,winner).then(data=>{res.send(data)})
+    }
+    else if (year && winner){
+        getMoviesByYearWinner(year,winner).then(data=>{res.send(data)})
+    }
+    else if (category){
+        getMoviesByCategory(category).then(data=>{res.send(data)})
+    }
+    else if (year){
+        getMoviesByYear(year).then(data=>{res.send(data)})
+    }
+    else if (winner){
+        getMoviesByWinner(winner).then(data=>{res.send(data)})
+    }
+    else {
+        res.status(400).send("Invalid Parameters");
+    }
+})
 
