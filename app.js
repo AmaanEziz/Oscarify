@@ -192,7 +192,7 @@ app.get('/movies/:index',(req,res)=>{
     .then(data => {
         console.log(data);
         res.send(data);
-    }), error => res.status(400).send(`error: ${error}`)
+    })
 
 });
 
