@@ -7,7 +7,6 @@ const app = express();
 //get data form Oscar.json file
 const Oscar_record = require('./oscars.json');
 
-
 app.use(bodyParser.json());
 app.use(express.json());
 app.set('view engine', 'ejs');  
@@ -27,7 +26,10 @@ app.get('/result', (req, res) => {
         request(url, (error, response, body) => {
             if(!error && response.statusCode == 200){
                 var data = JSON.parse(body)
-                console.log(data.Search[0].Title);
+                // if (data = " ") {
+                //     res.render('result', {error: "Invalid movie name"})
+                // }
+                // console.log(data.Search[0].Title);
                 for (var i = 0 ; i < Oscar_record.length; i++) {
                     data.Search.forEach( movie => {
                         var moviename = movie.Title;
@@ -192,7 +194,7 @@ app.get('/movies/:index',(req,res)=>{
     .then(data => {
         console.log(data);
         res.send(data);
-    })
+    }), error => res.status(400).send(`error: ${error}`)
 
 });
 
