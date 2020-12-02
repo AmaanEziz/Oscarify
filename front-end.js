@@ -18,8 +18,12 @@ app.listen(8080, () => {
 
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(express.static('views'))
+app.use('/css', express.static(__dirname + 'views/css'));
 
 app.set('view engine', 'ejs');  
+app.set('views', './views')
+
 
 
 
