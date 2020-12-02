@@ -24,9 +24,16 @@ app.get('/', (req, res) => {
 
 //Queries the given params and returns the result page accordingly
 app.get('/result', async (req, res) => {
+
     let category=req.query.category;
     let year=req.query.year;
     let winner=req.query.winner;
     let name=req.query.name;
-    functions.getMovieList(name,category,year,winner).then(data=>{res.render('result',{data:data})})
+    if (category || year || winner || name){
+    functions.getMovieList(name,category,year,winner).then(data=>{res.render('result',{data:data})})  }
+    else { 
+        res.render('result',{data:[]});
+    }
+
+
 });

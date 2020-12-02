@@ -8,108 +8,107 @@ function format(word){/////Converts all input strings to uniform standard for ea
 
 function createCategoryList()
 {
-    var list=[];
+    var List=[];
     for (var i=0; i<Oscars_record.length;i++){
-        list.push(format(Oscars_record[i].category));
+        List.push(format(Oscars_record[i].category));
     }
-    return list;
+    return List;
 }
-function createNameList()
+function createTitleList()
 {
-    var list=[];
+    var List=[];
     for (var i=0; i<Oscars_record.length;i++){
-        list.push(format(Oscars_record[i].film));
+        List.push(format(Oscars_record[i].film));
     }
-    return list;
+    return List;
 }
 
 function createYearList()
 {
-    var list=[];
+    var List=[];
     for (var i=0; i<Oscars_record.length;i++){
-        list.push(format(Oscars_record[i].year_ceremony));
+        List.push(format(Oscars_record[i].year_ceremony));
     }
-    return list;
+    return List;
 }
 
 
 function createWinnerList()
 {
-    var list=[];
+    var List=[];
     for (var i=0; i<Oscars_record.length;i++){
-        list.push(format(Oscars_record[i].winner));
+        List.push(format(Oscars_record[i].winner));
     }
-    return list;
+    return List;
 }
 
-const namelist=createNameList();
-const categorylist=createCategoryList();
-const yearlist=createYearList();
-const winnerlist=createWinnerList();
+const titleList=createTitleList();
+const categoryList=createCategoryList();
+const yearList=createYearList();
+const winnerList=createWinnerList();
 
-async function getODPdata(movie){//Returns ALL fields given by ODP API
+async function getOMDB(movie){//Returns ALL fields given by OMDB API
     try{
     const response = await fetch("http://www.omdbapi.com/?apikey=505ac8dc&t="+movie);
-    const ODPobject= await response.json();
-    return await ODPobject;
+    const OMDBobject= await response.json();
+    return await OMDBobject;
     }
     catch(error){return "Movie info not found"}
 }
 
-async function getODPfields(movie){//Returns only the fields we need from the ODP API
+async function getOMDBfields(movie){//Returns only the fields we need from the OMDB API
 
    let fields={};
-  let ODPdata=await getODPdata(movie).then(data=>{
+  let OMDB=await getOMDB(movie).then(data=>{
     return data;
        });
-    fields.Poster= ODPdata.Poster;
-    fields.Plot=ODPdata.Plot;
-    fields.IMDBReviewsLink="https://www.imdb.com/title/"+ODPdata.imdbID;
-    fields.StreamingLink="https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id="+ODPdata.imdbID;
+    fields.Poster= OMDB.Poster;
+    fields.Plot=OMDB.Plot;
+    fields.IMDBReviewsLink="https://www.imdb.com/title/"+OMDB.imdbID;
+    fields.StreamingLink="https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id="+OMDB.imdbID;
     return fields;
 
 }
 
 
-async function getDataAtIndex(index){//Merges Oscar data and ODP field data into one object and returns it
+async function getDataAtIndex(index){//Merges Oscar data and OMDB field data into one object and returns it
     let oscarsFields=Oscars_record[index];
     let movieName=oscarsFields.film;
-    let ODPfields=await getODPfields(movieName).then((data)=>{return data});
-    var finalObj = Object.assign({},oscarsFields,ODPfields);
-    delete finalObj.name;
-    return finalObj;
+    let OMDBfields=await getOMDBfields(movieName).then((data)=>{return data});
+    var IndexData= Object.assign({},oscarsFields,OMDBfields);
+    return IndexData;
     
     
 }
 
   
-async function getMovieList(titleParam,categoryParam,yearParam,winnerParam){//Long function, returns list with given params
-  let returnlist=[];
-  let params=[titleParam,categoryParam,yearParam,winnerParam];
+async function getMovieList(title,category,year,winner){//Long function, returns List with given params
+  let returnList=[];
+  let params=[title,category,year,winner];
   for (var i=0; i<params.length;i++){
       if (params[i]==null){params[i]=""}
       params[i]=format(params[i]);
   }
-  let title=params[0];
-  let category=params[1];
-  let year=params[2];
-  let winner=params[3];
+  title=params[0];
+  category=params[1];
+  year=params[2];
+  winner=params[3];
   for (i=0;i<Oscars_record.length;i++){
     
-  if (namelist[i].includes(title) &&categorylist[i].includes(category)
+  if (titleList[i].includes(title) &&categoryList[i].includes(category)
 
-      &&yearlist[i].includes(year)&&winnerlist[i].includes(winner)){
+      &&yearList[i].includes(year)&&winnerList[i].includes(winner)){
 
 
           let DataAtIndex= await getDataAtIndex(i).then((data)=>{return data;});
-          returnlist.push(DataAtIndex);
+          returnList.push(DataAtIndex);
       }
       
   }
-  return returnlist;
+  return returnList;
 }
 
 
 //Mod.exports needed in order to export the needed functions to different files
-module.exports={fetch,Oscars_record,categorylist,winnerlist,yearlist,getODPdata,getODPfields,
+module.exports={
     getDataAtIndex,getMovieList}

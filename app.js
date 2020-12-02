@@ -1,14 +1,14 @@
 const express=require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const functions=require('./feature.js');
 
 const app = express();
 
-//get data form Oscar.json file
-const Oscar_record = require('./oscars.json');
+// //get data form Oscar.json file
+// const Oscar_record = require('./oscars.json');
 
-//app.use(bodyParser.json());
-app.use(express.json());
+// //app.use(bodyParser.json());
+// app.use(express.json());
 
 
 app.listen(8080,()=>{console.log("listening on port 8080");});
@@ -62,24 +62,31 @@ app.listen(8080,()=>{console.log("listening on port 8080");});
 // });
 
 app.get('/movies',(req,res)=>{
+
     let category=req.query.category;
     let year=req.query.year;
     let winner=req.query.winner;
     let name=req.query.name;
     let index=req.query.index;
     if (index){
-        functions.getDataAtIndex(index).then(data=>{res.send(data)})//Singleton request
+        functions.getDataAtIndex(index).then(data=>{
+            if (data.length>0){
+                res.send(data) }
+                else {res.send("Invalid Parameter Values Specified")}
+        
+        })//Singleton request
     }
-    else if (name || category || year || winner){
+    else if (name || category || year || winner) {
+
         functions.getMovieList(name,category,year,winner).then(data=>{
             if (data.length>0){
             res.send(data) }
-            else {res.send("No Results Found")}
-        
+            else {res.send("Invalid Parameter Values Specified")}
+
+
         });
-    }
-    else {
-        res.send("Invalid Parameters");
-    }
-})
+   }
+   else {res.send("Invalid Parameters Provided")}
+   
+});
 
