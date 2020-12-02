@@ -1,38 +1,54 @@
 <% include header %>
 
-	<title>Results Page</title>
+<title>Results Page</title>
 </head>
-<body>
-<div class="container">
-	<h1 class ="text-center mt-4"> Results Page</h1>
-	<table border = "1" class ="text-center mt-4 center" >
-	  <tr>
-		<th>Name</th>
-		<th>Year film</th>
-		<th>Year Ceremony</th>
-		<th>IMDB Link</th>
-		<th>Streaming Link</th>
-		<th>Oscar Category</th>
-		<th>Winner</th>
-		<th>Cover</th>
-	  </tr>
-	  <% data['Search'].forEach(function(movie){ %>
+
+	
+	  <% if(data.length>0){ %>
+		<body>
+			<<body style="background-color:#111010; color: white">
+				<div class="container">
+					<h1 class ="text-center mt-4" style="font-size:48px;">Search Results</h1>
+					<div style="text-align:center; font-size:16px">  
+						<a href="/">Back To Search</a>
+					</div>
+				<table class ="align-middle text-center mt-4 center table table-hover table-border" >
+				  <tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Year film</th>
+					<th>Year Ceremony</th>
+					
+					<th>IMDB Link</th>
+					<th>Streaming Link</th>
+					<th>Oscar Category</th>
+					<th>Winner</th>
+					<th>Cover</th>
+				  </tr>
+	  <% data.forEach(function(movie){ %>
 	  <tr>
 		<% var imdb_url = 'https://www.imdb.com/title/' + movie['imdbID'] %>
 		<% var streamingLink = "https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id=" + movie['imdbID'] %>
-		<td><%= movie.Title %></td>
-		<td><%= movie.Year %></td>
-		<td><%= movie.year_ceremony %></td>      
-		<td><a href="<%= imdb_url %>">View on IMDB</a></td>
-		<td><a href="<%= streamingLink %>">Watch Now</a></td>
-		<td><%= movie.category %></td>
-		<td><%= movie.winner %></td>
-		<td><img src="<%= movie['Poster'] %>" alt=""></td>
+		<td class="align-middle"><%= movie.Title %></td>
+		<td class="align-middle"><%= movie.Plot %></td>
+		<td class="align-middle"><%= movie.yearReleased %></td>
+		<td class="align-middle"><%= movie.yearCeremony %></td>      
+		<td class="align-middle"><a href="<%= movie.IMDBReviewsLink %>">View on IMDB</a></td>
+		<td class="align-middle"><a href="<%= movie.StreamingLink %>">Watch Now</a></td>
+		<td class="align-middle"><%= movie.OscarCategory %></td>
+		<td class="align-middle"><%= movie.Winner %></td>
+		<td class="align-middle"><img src="<%= movie['Poster'] %>" alt=""></td>
 	  </tr>
-	  <% }) %>
+	  <% }) } else {%>
+		  <h1 style="text-align:center">Invalid Search, Please Try Again</h1>
+	  <% }%>
+
 	</table>
+	
 	<br/>
-	 <a href="/">Search Again!</a>
+	 <a href="/"><p style="text-align:center">Search Again!</p></a>
 </div>
 </body>
+
 </html>
+

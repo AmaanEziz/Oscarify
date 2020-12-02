@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const moviesArr = require('./oscars.json');
+const Oscar_record = require('./oscars.json');
 
 
 function format(word){
@@ -9,7 +9,7 @@ function format(word){
 
 function createzeroList(){
   var list=[];
-  for (var i=0; i<moviesArr.length;i++){
+  for (var i=0; i<Oscar_record.length;i++){
     list.push(0);
 }
 return list;
@@ -17,16 +17,16 @@ return list;
 function createCategoryList()
 {
     var list=[];
-    for (var i=0; i<moviesArr.length;i++){
-        list.push(format(moviesArr[i].category));
+    for (var i=0; i<Oscar_record.length;i++){
+        list.push(format(Oscar_record[i].category));
     }
     return list;
 }
 function createnamelist()
 {
     var list=[];
-    for (var i=0; i<moviesArr.length;i++){
-        list.push(format(moviesArr[i].film));
+    for (var i=0; i<Oscar_record.length;i++){
+        list.push(format(Oscar_record[i].film));
     }
     return list;
 }
@@ -34,8 +34,8 @@ function createnamelist()
 function createYearList()
 {
     var list=[];
-    for (var i=0; i<moviesArr.length;i++){
-        list.push(format(moviesArr[i].year_ceremony));
+    for (var i=0; i<Oscar_record.length;i++){
+        list.push(format(Oscar_record[i].year_ceremony));
     }
     return list;
 }
@@ -44,8 +44,8 @@ function createYearList()
 function createWinnerList()
 {
     var list=[];
-    for (var i=0; i<moviesArr.length;i++){
-        list.push(format(moviesArr[i].winner));
+    for (var i=0; i<Oscar_record.length;i++){
+        list.push(format(Oscar_record[i].winner));
     }
     return list;
 }
@@ -101,7 +101,7 @@ async function getMoviesByName(name){
 }
 
 async function getMoviesByIndex(index){ //Returns the Needed info given an Index of the oscars.json file
-    let movie=moviesArr[index];
+    let movie=Oscar_record[index];
     let MovieName=movie.film;
     let ODPinfo=await getODPdata(MovieName).then((data)=>{return data;});
     let neededInfo=await ReturnOnlyNeededInfo(ODPinfo);
@@ -121,7 +121,7 @@ async function getMovieList(listzero,title,listtwo,category,listthree,year,listf
     let categoryvalue=format(category);
     let yearvalue=format(year);
     let winnervalue=format(winner);
-    for (let i=0;i<moviesArr.length;i++){
+    for (let i=0;i<Oscar_record.length;i++){
       
         if (listzero[i].toString().includes(titlevalue) &&listtwo[i].toString().includes(categoryvalue)&&listthree[i]==yearvalue&&listfour[i]==winnervalue){
             let MoviesByIndex= await getMoviesByIndex(i).then((data)=>{return data;});
@@ -171,6 +171,6 @@ async function getMoviesByYear(year){
     return await getMovieList(zerolist,0,categorylist,category,yearlist,year,winnerlist,winner);
   }
 
-module.exports={fetch,moviesArr,getMoviesByName, createCategoryList,createYearList,createWinnerList,categorylist,winnerlist,yearlist,getODPdata,
+module.exports={fetch,Oscar_record,getMoviesByName, createCategoryList,createYearList,createWinnerList,categorylist,winnerlist,yearlist,getODPdata,
     ReturnOnlyNeededInfo,getCollectionMoviesByName,getMoviesByIndex,getMovieList,getMoviesByYear,getMoviesByCategory,getMoviesByWinner,getMoviesByYearWinner,
     getMoviesByCategoryWinner,getMoviesByCategoryYear,getMoviesByCategoryYearWinner,createzeroList,createnamelist}
