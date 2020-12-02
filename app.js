@@ -20,13 +20,29 @@ app.listen(8080,()=>{console.log("listening on port 8080");});
 
   // SINGLETON: request by movie index
 app.get('/movies/:index',(req,res)=>{ 
-    
+
     getMoviesByIndex(req.params.index)
     .then(data => {
         console.log(data);
         res.send(data);
     }), error => res.status(400).send(`error: ${error}`)
 
+});
+
+// SINGLETON: request by catergory , year , and winner 
+app.get('/movies/collections/:category/:year/:winner',(req,res)=>{
+
+    let category =  req.params.category ;
+    let year = req.params.year;
+
+    getMoviesByCategoryYear(category,year)
+    .then(data => {
+        // console.log(data);
+        res.status(200).send(data)})
+    },  error => {
+        console.log(error);
+        res.status(400).send(error.message);
+        
 });
 
 
@@ -45,9 +61,7 @@ app.get('/movies/collections/:category/:year',(req,res)=>{
     },  error => {
         console.log(error);
         res.status(400).send(error.message);
-    });
-
-
+});
 
 
 // For Last endpoint Picture http://localhost:8080/moives/search?category=Best Picture
