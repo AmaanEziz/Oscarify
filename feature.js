@@ -106,9 +106,7 @@ async function getMovieList(titleParam,categoryParam,yearParam,winnerParam){//Lo
       }
       
   }
-  if (returnlist.length==0){
-  return "Legal parameters were given but no results were found"}
-  else {return returnlist;}
+  return returnlist;
 }
 
 
