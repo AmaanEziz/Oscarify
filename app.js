@@ -4,62 +4,9 @@ const functions=require('./feature.js');
 
 const app = express();
 
-// //get data form Oscar.json file
-// const Oscar_record = require('./oscars.json');
-
-// //app.use(bodyParser.json());
-// app.use(express.json());
-
-
 app.listen(8080,()=>{console.log("listening on port 8080");});
 
 
-
-
-  // SINGLETON: request by movie index
-// app.get('/movies/:index',(req,res)=>{ 
-
-//     functions.getDataAtIndex(req.params.index)
-//     .then(data => {
-//         console.log(data);
-//         res.send(data);
-//     })
-
-// });
-
-// // SINGLETON: request by catergory , year , and winner 
-// app.get('/movies/collections/:category/:year/:winner',(req,res)=>{
-
-//     let category =  req.params.category ;
-//     let year = req.params.year;
-
-//     getMoviesByCategoryYear(category,year)
-//     .then(data => {
-//         // console.log(data);
-//         res.status(200).send(data)})
-//     },  error => {
-//         console.log(error);
-//         res.status(400).send(error.message);
-        
-// });
-
-
-// //collections request  By Category and year
-// // test url : 
-
-// app.get('/movies/collections/:category/:year',(req,res)=>{
-
-//     let category =  req.params.category ;
-//     let year = req.params.year;
-
-//     getMoviesByCategoryYear(category,year)
-//     .then(data => {
-//         // console.log(data);
-//         res.status(200).send(data)})
-//     },  error => {
-//         console.log(error);
-//         res.status(400).send(error.message);
-// });
 
 app.get('/movies',(req,res)=>{
 
@@ -69,24 +16,81 @@ app.get('/movies',(req,res)=>{
     let name=req.query.name;
     let index=req.query.index;
     if (index){
-        functions.getDataAtIndex(index).then(data=>{
-            if (data.length>0){
-                res.send(data) }
-                else {res.send("Invalid Parameter Values Specified")}
+        functions.getDataAtIndex(index).then(data=>{/////////SINGLETON ENDPOINt is /movies?index={index}
+            if (data!=[]){
+                res.status(200).send(data);
+                res.status(400).send(error.message)
+            }
+            else {
+                res.send("Invalid Parameter Values")
+            }
         
-        })//Singleton request
+        
+        });
     }
     else if (name || category || year || winner) {
 
         functions.getMovieList(name,category,year,winner).then(data=>{
-            if (data.length>0){
-            res.send(data) }
-            else {res.send("Invalid Parameter Values Specified")}
-
-
+            if (data!=[]){
+                res.status(200).send(data);
+                res.status(400).send(error.message)
+            }
+            else {
+                res.send("Invalid Parameter Values")
+            }
+        
+        
         });
    }
    else {res.send("Invalid Parameters Provided")}
    
 });
 
+
+
+app.get('/movies/:category/:year/:winner',(req,res)=>{
+
+    let category =  req.params.category ;
+    let year = req.params.year;
+    let winner = req.params.winner;
+
+    functions.getMovieList(null, category,year,winner)
+    .then(data=>{
+        if (data!=[]){
+        res.status(200).send(data) }
+        else {res.status(400).send("Invalid Parameter Values Specified")};
+        });
+
+});
+
+
+
+app.get('/collections/:category/:year',(req,res)=>{
+
+    let category =  req.params.category ;
+    let year = req.params.year;
+
+    functions.getMovieList(null, category,year,null)
+    .then(data=>{
+        if (data!=[]){
+        res.status(200).send(data) }
+        else {res.status(400).send("Invalid Parameter Values Specified")};
+        });
+        
+});
+
+
+
+app.get('/search',(req,res)=>{
+
+    let category=req.query.category;
+
+    functions.getMovieList(null, category,null,null)
+    .then(data=>{
+        if (data!=[]){
+        res.status(200).send(data) }
+        else {res.status(400).send("Invalid Parameter Values Specified")};
+        });
+        
+
+});
