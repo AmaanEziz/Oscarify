@@ -1,176 +1,114 @@
 const fetch = require("node-fetch");
-const Oscar_record = require('./oscars.json');
+const Oscars_record = require('./oscars.json');
 
 
-function format(word){
+function format(word){/////Converts all input strings to uniform standard for ease in comparing data
   return word.toString().toUpperCase().replace(/ /g,"+");
 }
 
-
-function createzeroList(){
-  var list=[];
-  for (var i=0; i<Oscar_record.length;i++){
-    list.push(0);
-}
-return list;
-}
 function createCategoryList()
 {
-    var list=[];
-    for (var i=0; i<Oscar_record.length;i++){
-        list.push(format(Oscar_record[i].category));
+    var List=[];
+    for (var i=0; i<Oscars_record.length;i++){
+        List.push(format(Oscars_record[i].category));
     }
-    return list;
+    return List;
 }
-function createnamelist()
+function createTitleList()
 {
-    var list=[];
-    for (var i=0; i<Oscar_record.length;i++){
-        list.push(format(Oscar_record[i].film));
+    var List=[];
+    for (var i=0; i<Oscars_record.length;i++){
+        List.push(format(Oscars_record[i].film));
     }
-    return list;
+    return List;
 }
 
 function createYearList()
 {
-    var list=[];
-    for (var i=0; i<Oscar_record.length;i++){
-        list.push(format(Oscar_record[i].year_ceremony));
+    var List=[];
+    for (var i=0; i<Oscars_record.length;i++){
+        List.push(format(Oscars_record[i].year_ceremony));
     }
-    return list;
+    return List;
 }
 
 
 function createWinnerList()
 {
-    var list=[];
-    for (var i=0; i<Oscar_record.length;i++){
-        list.push(format(Oscar_record[i].winner));
+    var List=[];
+    for (var i=0; i<Oscars_record.length;i++){
+        List.push(format(Oscars_record[i].winner));
     }
-    return list;
+    return List;
 }
 
-const namelist=createnamelist();
-const categorylist=createCategoryList();
-const yearlist=createYearList();
-const winnerlist=createWinnerList();
-const zerolist=createzeroList();
+const titleList=createTitleList();
+const categoryList=createCategoryList();
+const yearList=createYearList();
+const winnerList=createWinnerList();
 
-
-async function getODPdata(movie){//Gets ALL ODP info of a movie when given its title
+async function getOMDB(movie){//Returns ALL fields given by OMDB API
     try{
-    const response = await fetch("http://www.omdbapi.com/?t="+movie+"&apikey=47175bcf");
-    const ODPinfo = await response.json();
-  
-    return await ODPinfo;}
-    catch(error){return error;}
-}
-
-
-
-
-function ReturnOnlyNeededInfo(movie){//Takes in an ODP object and trims the unnecessary info and adds streaming/review link
-    delete movie.Rated;
-    delete movie.imdbRating;
-    delete movie.Released;
-    delete movie.Runtime;
-    delete movie.Director;
-    delete movie.Writer;
-    delete movie.Metascore;
-    delete movie.imdbVotes;
-    delete movie.Year;
-    delete movie.Type;
-    delete movie.DVD;
-    delete movie.BoxOffice;
-    delete movie.Production;
-    delete movie.Website;
-    delete movie.Ratings;
-    delete movie.Language;
-    delete movie.Country;
-    delete movie.Response;
-    movie.IMDBReviewsLink="https://www.imdb.com/title/"+movie.imdbID;
-    movie.StreamingLink="https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id="+movie.imdbID;
-    delete movie.imdbID;
-    return movie;
-}
-
-async function getMoviesByName(name){
-  let odpinfo=await getODPdata(name).then(data=>{return data;})
-  let MoviesByName=ReturnOnlyNeededInfo(odpinfo);
-  return MoviesByName;
-}
-
-async function getMoviesByIndex(index){ //Returns the Needed info given an Index of the oscars.json file
-    let movie=Oscar_record[index];
-    let MovieName=movie.film;
-    let ODPinfo=await getODPdata(MovieName).then((data)=>{return data;});
-    let neededInfo=await ReturnOnlyNeededInfo(ODPinfo);
-    neededInfo.yearCeremony=movie.year_ceremony;
-    neededInfo.yearReleased=movie.year_film;
-    neededInfo.OscarCategory=movie.category;
-    neededInfo.Winner=movie.winner;
-    return await neededInfo;
-    
-}
-
-
-  
-async function getMovieList(listzero,title,listtwo,category,listthree,year,listfour,winner){
-    let returnlist=[];
-    let titlevalue=format(title);
-    let categoryvalue=format(category);
-    let yearvalue=format(year);
-    let winnervalue=format(winner);
-    for (let i=0;i<Oscar_record.length;i++){
-      
-        if (listzero[i].toString().includes(titlevalue) &&listtwo[i].toString().includes(categoryvalue)&&listthree[i]==yearvalue&&listfour[i]==winnervalue){
-            let MoviesByIndex= await getMoviesByIndex(i).then((data)=>{return data;});
-            returnlist.push(MoviesByIndex);
-        }
-        
+    const response = await fetch("http://www.omdbapi.com/?apikey=505ac8dc&t="+movie);
+    const OMDBobject= await response.json();
+    return await OMDBobject;
     }
-    return await returnlist;
+    catch(error){return "Movie info not found"}
+}
+
+async function getOMDBfields(movie){//Returns only the fields we need from the OMDB API
+
+   let fields={};
+  let OMDB=await getOMDB(movie).then(data=>{
+    return data;
+       });
+    fields.Poster= OMDB.Poster;
+    fields.Plot=OMDB.Plot;
+    fields.IMDBReviewsLink="https://www.imdb.com/title/"+OMDB.imdbID;
+    fields.StreamingLink="https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id="+OMDB.imdbID;
+    return fields;
+
 }
 
 
-async function getCollectionMoviesByName(name){
-
-  return getMovieList(namelist,name,zerolist,0,zerolist,0,zerolist,0).then(data=>{return data;});
-  }
-
-async function getMoviesByCategory(category){ 
-    return await getMovieList(zerolist,0,categorylist,category,zerolist,0,zerolist,null);
-  }
-
-
-async function getMoviesByYear(year){ 
-    return await getMovieList(zerolist,0,zerolist,0,yearlist,year,zerolist,null);
-  }
-  async function getMoviesByWinner(winner){ 
-    return await getMovieList(zerolist,0,zerolist,0,zerolist,0,winnerlist,winner);
+async function getDataAtIndex(index){//Merges Oscar data and OMDB field data into one object and returns it
+    let oscarsFields=Oscars_record[index];
+    let movieName=oscarsFields.film;
+    let OMDBfields=await getOMDBfields(movieName).then((data)=>{return data});
+    var IndexData= Object.assign({},oscarsFields,OMDBfields);
+    return IndexData;
     
-  }
-
-  async function getMoviesByCategoryYear(category,year){ 
-    return await getMovieList(zerolist,0,categorylist,category,yearlist,year,zerolist,null).then(data=>{return data;});
     
+}
+
+  
+async function getMovieList(title,category,year,winner){//Long function, returns List with given params
+  let returnList=[];
+  let params=[title,category,year,winner];
+  for (var i=0; i<params.length;i++){
+      if (params[i]==null){params[i]=""}
+      params[i]=format(params[i]);
   }
-
-
-  async function getMoviesByCategoryWinner(category,winner){ 
-    return await getMovieList(zerolist,0,categorylist,category,zerolist,0,winnerlist,winner);
+  title=params[0];
+  category=params[1];
+  year=params[2];
+  winner=params[3];
+  for (i=0;i<Oscars_record.length;i++){
     
+  if (titleList[i].includes(title) &&categoryList[i].includes(category)
+
+      &&yearList[i].includes(year)&&winnerList[i].includes(winner)){
+
+
+          let DataAtIndex= await getDataAtIndex(i).then((data)=>{return data;});
+          returnList.push(DataAtIndex);
+      }
+      
   }
+  return returnList;
+}
 
-  async function getMoviesByYearWinner(year,winner){ 
 
-    return await getMovieList(zerolist,0,zerolist,0,yearlist,year,winnerlist,winner);
-  }
-
-  async function getMoviesByCategoryYearWinner(category,year,winner){ 
-    return await getMovieList(zerolist,0,categorylist,category,yearlist,year,winnerlist,winner);
-  }
-
-module.exports={fetch,Oscar_record,getMoviesByName, createCategoryList,createYearList,createWinnerList,categorylist,winnerlist,yearlist,getODPdata,
-    ReturnOnlyNeededInfo,getCollectionMoviesByName,getMoviesByIndex,getMovieList,getMoviesByYear,getMoviesByCategory,getMoviesByWinner,getMoviesByYearWinner,
-    getMoviesByCategoryWinner,getMoviesByCategoryYear,getMoviesByCategoryYearWinner,createzeroList,createnamelist}
+//Mod.exports needed in order to export the needed functions to different files
+module.exports={
+    getDataAtIndex,getMovieList}

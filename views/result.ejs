@@ -29,14 +29,14 @@
 	  <tr>
 		<% var imdb_url = 'https://www.imdb.com/title/' + movie['imdbID'] %>
 		<% var streamingLink = "https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id=" + movie['imdbID'] %>
-		<td class="align-middle"><%= movie.Title %></td>
+		<td class="align-middle"><%= movie.film %></td>
 		<td class="align-middle"><%= movie.Plot %></td>
-		<td class="align-middle"><%= movie.yearReleased %></td>
-		<td class="align-middle"><%= movie.yearCeremony %></td>      
+		<td class="align-middle"><%= movie.year_film %></td>
+		<td class="align-middle"><%= movie.year_ceremony %></td>      
 		<td class="align-middle"><a href="<%= movie.IMDBReviewsLink %>">View on IMDB</a></td>
 		<td class="align-middle"><a href="<%= movie.StreamingLink %>">Watch Now</a></td>
-		<td class="align-middle"><%= movie.OscarCategory %></td>
-		<td class="align-middle"><%= movie.Winner %></td>
+		<td class="align-middle"><%= movie.category %></td>
+		<td class="align-middle"><%= movie.winner %></td>
 		<td class="align-middle"><img src="<%= movie['Poster'] %>" alt=""></td>
 	  </tr>
 	  <% }) } else {%>
