@@ -72,11 +72,13 @@ async function getOMDBfields(movie){//Returns only the fields we need from the O
 
 
 async function getDataAtIndex(index){//Merges Oscar data and OMDB field data into one object and returns it
+    if(index>-1&&index<10395){
     let oscarsFields=Oscars_record[index];
     let movieName=oscarsFields.film;
     let OMDBfields=await getOMDBfields(movieName).then((data)=>{return data});
     var IndexData= Object.assign({},oscarsFields,OMDBfields);
-    return IndexData;
+    return IndexData;}
+    else {return []}
     
     
 }
@@ -111,4 +113,5 @@ async function getMovieList(title,category,year,winner){//Long function, returns
 
 //Mod.exports needed in order to export the needed functions to different files
 module.exports={
-    getDataAtIndex,getMovieList}
+   getDataAtIndex,getMovieList}
+  

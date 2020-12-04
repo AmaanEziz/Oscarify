@@ -8,7 +8,6 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 app.listen(8080,()=>{console.log("listening on port 8080")});
-
 // SINGLETON: request by catergory , year , and winner 
 // test url: http://localhost:8080/movies/best picture/2000/true
 
