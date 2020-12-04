@@ -1,7 +1,12 @@
 body {
 	font-family: 'Georgia', serif;
-    padding-bottom: 50px;
+	padding-bottom: 50px;
+	background-color:#111010; 
+	color: white
 	}
+h1 {
+	color:  rgb(255, 214, 80);
+}
 	img{
 		width: 200px;
 		height: 300px;
@@ -12,11 +17,11 @@ body {
 	}
 	table td{
 		border-radius: 4px;
-		border-color: coral !important;
+		border-color: rgb(255, 229, 80) !important;
 	}
 	table th{
-		background: #111010;
-		border-color: coral !important;
+		background: hsl(0, 3%, 6%);
+		border-color: rgb(255, 229, 80) !important;
 	}
 	table th:hover{
 		color: 	#D4AF37;
