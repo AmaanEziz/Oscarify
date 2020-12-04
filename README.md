@@ -1,16 +1,23 @@
 # CSC131-Group-project
 
 
-Movies Search Mockup :
+Final Mockup:
 
-<img src="mockup-image/Mockup-1.png">
+Search Page:
+
+
+<img src="mockup-image/Search-page.PNG">
 <br><br><br><br>
 
-<img src="mockup-image/Mockup-2.png">
+Result Page:
+
+
+<img src="mockup-image/Result-page.PNG">
 <br><br><br><br>
 
-<img src="mockup-image/Mockup-3.png">
+Invalid Page:
+
+
+<img src="mockup-image/Invalid-page.PNG">
 <br><br><br><br>
 
-<img src="mockup-image/Mockup-4.png">
-<br><br><br>
