@@ -53,7 +53,7 @@ app.get('/movies/:category/:year/:winner',(req,res)=>{
 
 
 // Requirement 2.1.3 
-// For Last endpoint test:  http://localhost:8080/movies/search?category=BEST PICTURE&year=2014
+// For Last endpoint test:  http://localhost:8080/movies/search?category=CINEMATOGRAPHY&year=2014
 app.get('/movies/search',(req,res)=>{
 
     let category=req.query.category;
@@ -62,7 +62,7 @@ app.get('/movies/search',(req,res)=>{
     let name=req.query.name;
     let index=req.query.index;
 
-    // SINGLETON: request by movie index /movies/search?index={index}
+    // SINGLETON: request by movie index /movies/search?index=7
     if (index){
         functions.getDataAtIndex(index).then(data=>{ 
             if (data.length == 0){
