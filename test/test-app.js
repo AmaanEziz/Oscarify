@@ -38,3 +38,19 @@ describe('COLLECTION:  Movie tests',function(){
 
 // Test for 3rd endpoint /movies/search
 
+describe('SEARCH:  Movie tests',function(){
+
+    it('check for data correction base on movie name (the movie object should have all the Oscar Dataset require)', async () =>{
+        await functions.getMovieList("Batman",null,null,null).then(data=>{
+            // console.log(data);
+            expect(data).to.be.an('array');
+            data.forEach(movies => {
+                expect(movies.category.length).to.be.above(1);
+                expect(movies.IMDBReviewsLink.length).to.be.above(1);
+                expect(movies.Plot.length).to.be.above(1);
+                expect(movies.StreamingLink.length).to.be.above(1);
+            })
+        })
+
+    })
+})
