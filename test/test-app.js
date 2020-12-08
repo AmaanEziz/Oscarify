@@ -17,3 +17,24 @@ describe('SINGLETON:  Movie tests',function(){
     })
 
 })
+
+
+//Test for COLLECTION  request  By Category and year
+describe('COLLECTION:  Movie tests',function(){
+
+    it('check that there are a collection of movies category: Short Film in 1997', async () =>{
+        await functions.getMovieList(null,"Short Film","1997",null).then(data=>{
+            // console.log(data);
+            expect(data.length).to.be.above(1);
+            expect(data).to.be.an('array');
+            data.forEach(movies => {
+                expect(movies.category).to.include('SHORT FILM');
+                expect(movies.year_ceremony).equals(1997);
+            })
+        })
+
+    })
+})
+
+// Test for 3rd endpoint /movies/search
+
