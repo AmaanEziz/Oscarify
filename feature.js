@@ -110,8 +110,17 @@ async function getMovieList(title,category,year,winner){//Long function, returns
   return returnList;
 }
 
+async function createPosters(){
+    let posterList=[]
+    for (var i=0;i<3;i++){
+        let obj= await getDataAtIndex(Math.floor(Math.random() * 10000)).then(data=>{return data.Poster});
+        posterList.push(obj);
+    }
+    return posterList;
+}
+
 
 //Mod.exports needed in order to export the needed functions to different files
 module.exports={
-   getDataAtIndex,getMovieList}
+   getDataAtIndex,getMovieList,createPosters}
   

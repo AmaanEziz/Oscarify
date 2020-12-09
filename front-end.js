@@ -16,10 +16,11 @@ app.set('view engine', 'ejs');
 app.set('views', './views')
 
 
-
 // get param from UI (Search Page)
-app.get('/', (req, res) => {
-    res.render('search');
+app.get('/', (req, res) => 
+{
+
+    functions.createPosters().then(data=>{res.render('search',{data:data});})
 });
 
 //Queries the given params and returns the result page accordingly
