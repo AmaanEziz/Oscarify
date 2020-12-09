@@ -7,7 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.json());
 
-app.listen(8080,()=>{console.log("listening on port 8080")});
+app.listen(8000,()=>{console.log("listening on port 8000")});
 
 // Requirement 2.1.1 
 //collections request  By Category and year
