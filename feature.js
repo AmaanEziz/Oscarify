@@ -109,12 +109,18 @@ async function getMovieList(title,category,year,winner){//Long function, returns
   }
   return returnList;
 }
-
+function RandNum(){
+    let num=Math.floor(Math.random() * 2200)+8000;
+    return num;
+}
 async function createPosters(){
     let posterList=[]
     for (var i=0;i<3;i++){
-        let obj= await getDataAtIndex(Math.floor(Math.random() * 10000)).then(data=>{return data.Poster});
-        posterList.push(obj);
+        let poster;
+        while (!poster || poster=="NA")
+       { poster= await getDataAtIndex(RandNum()).then(data=>{return data.Poster});}
+        posterList.push(poster);
+        
     }
     return posterList;
 }

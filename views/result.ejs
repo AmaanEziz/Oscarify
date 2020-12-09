@@ -13,6 +13,7 @@
 						<a  href="/"><p class="btn btn-outline-warning "> Back To Search</p></a>
 					</div>
 				<table class ="align-middle text-center mt-4 center table table-hover table-border" >
+
 				  <tr>
 					<th>Cover</th>
 					<th>Name</th>
@@ -29,7 +30,7 @@
 	  <tr>
 		<% var imdb_url = 'https://www.imdb.com/title/' + movie['imdbID'] %>
 		<% var streamingLink = "https://streamvideo.link/getvideo?key=cmlinIufEwFXuZrA&video_id=" + movie['imdbID'] %>
-		<td class="align-middle"><img src="<%= movie['Poster'] %>" alt=""></td>
+		<td class="align-middle"><img src="<%= movie['Poster'] %>"  alt="Movie Image"></td>
 		<td class="align-middle"><%= movie.film %></td>
 		<td class="align-middle"><%= movie.Plot %></td>
 		<td class="align-middle"><%= movie.year_film %></td>
