@@ -11,7 +11,7 @@ app.listen(8000,()=>{console.log("listening on port 8000")});
 
 // Requirement 2.1.1 
 //collections request  By Category and year
-// test url : http://localhost:8080/collections/Actor/2015
+// test url : http://localhost:8000/collections/Actor/2015
 
 app.get('/collections/:category/:year',(req,res)=>{
 
@@ -31,7 +31,7 @@ app.get('/collections/:category/:year',(req,res)=>{
 
 // Requirement 2.1.2
 // SINGLETON: request by catergory , year , and winner 
-// test url: http://localhost:8080/movies/best picture/2000/true
+// test url: http://localhost:8000/movies/best picture/2000/true
 
 app.get('/movies/:category/:year/:winner',(req,res)=>{
 
@@ -53,7 +53,7 @@ app.get('/movies/:category/:year/:winner',(req,res)=>{
 
 
 // Requirement 2.1.3 
-// For Last endpoint test:  http://localhost:8080/movies/search?category=CINEMATOGRAPHY&year=2014
+// For Last endpoint test:  http://localhost:8000/movies/search?winner=true&year=2014
 app.get('/movies/search',(req,res)=>{
 
     let category=req.query.category;
