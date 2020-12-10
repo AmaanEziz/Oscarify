@@ -1,6 +1,6 @@
 const express=require('express');
 
-const functions=require('./feature.js');
+const functions=require('./Functions.js');
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.set('views', './views')
 app.get('/', (req, res) => 
 {
 
-    functions.createPosters().then(data=>{res.render('search',{data:data});})
+    functions.createRandPosters().then(data=>{res.render('search',{data:data});})
 });
 
 //Queries the given params and returns the result page accordingly

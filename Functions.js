@@ -1,51 +1,46 @@
 const fetch = require("node-fetch");
-const Oscars_record = require('./oscars.json');
-
+const Oscars_record = require('./oscars.json');//Oscars file as a JSON array
 
 function format(word){/////Converts all input strings to uniform standard for ease in comparing data
   return word.toString().toUpperCase().replace(/ /g,"+");
 }
 
-function createCategoryList()
+const categoryList=(function createCategoryList()
 {
     var List=[];
     for (var i=0; i<Oscars_record.length;i++){
         List.push(format(Oscars_record[i].category));
     }
     return List;
-}
-function createTitleList()
+})();
+const titleList=(function createTitleList()
 {
     var List=[];
     for (var i=0; i<Oscars_record.length;i++){
         List.push(format(Oscars_record[i].film));
     }
     return List;
-}
+})();
 
-function createYearList()
+const yearList=(function createYearList()
 {
     var List=[];
     for (var i=0; i<Oscars_record.length;i++){
         List.push(format(Oscars_record[i].year_ceremony));
     }
     return List;
-}
+})();
 
 
-function createWinnerList()
+const winnerList=(function createWinnerList()
 {
     var List=[];
     for (var i=0; i<Oscars_record.length;i++){
         List.push(format(Oscars_record[i].winner));
     }
     return List;
-}
+})();
 
-const titleList=createTitleList();
-const categoryList=createCategoryList();
-const yearList=createYearList();
-const winnerList=createWinnerList();
 
 async function getOMDB(movie){//Returns ALL fields given by OMDB API
     try{
@@ -87,7 +82,7 @@ async function getDataAtIndex(index){//Merges Oscar data and OMDB field data int
 async function getMovieList(title,category,year,winner){//Long function, returns List with given params
   let returnList=[];
   let params=[title,category,year,winner];
-  for (var i=0; i<params.length;i++){
+  for (var i=0; i<params.length;i++){//converts unspecified parameter to empty string
       if (params[i]==null){params[i]=""}
       params[i]=format(params[i]);
   }
@@ -97,7 +92,7 @@ async function getMovieList(title,category,year,winner){//Long function, returns
   winner=params[3];
   for (i=0;i<Oscars_record.length;i++){
     
-  if (titleList[i].includes(title) &&categoryList[i].includes(category)
+  if (titleList[i].includes(title) &&categoryList[i].includes(category)//Searches what movies include the criteria 
 
       &&yearList[i].includes(year)&&winnerList[i].includes(winner)){
 
@@ -109,24 +104,29 @@ async function getMovieList(title,category,year,winner){//Long function, returns
   }
   return returnList;
 }
+
+
 function RandNum(){
     let num=Math.floor(Math.random() * 2200)+8000;
     return num;
 }
-async function createPosters(){
+
+async function createRandPosters(){
     let posterList=[]
     for (var i=0;i<3;i++){
         let poster;
-        while (!poster || poster=="NA")
+        while (!poster || poster=="N/A")
        { poster= await getDataAtIndex(RandNum()).then(data=>{return data.Poster});}
         posterList.push(poster);
         
     }
+    
     return posterList;
+    
 }
 
 
 //Mod.exports needed in order to export the needed functions to different files
 module.exports={
-   getDataAtIndex,getMovieList,createPosters}
+   getDataAtIndex,getMovieList,createRandPosters}
   
