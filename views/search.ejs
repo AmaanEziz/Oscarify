@@ -1,8 +1,9 @@
 <% include header %>
 
 </head>
-<body>
+<body id="frontpage">
 <div class="container">
+	<br>
 	<h1 class ="text-center mt-4 p-4">Oscar Movie Search</h1>
 	<form action="/result" method="get">
 		<div class="form-group p-4" >
@@ -21,7 +22,7 @@
 	</form>
 </div>
 <br>
-<div>
+<div style="text-align:center">
 <% data.forEach(function(movie){ %>
 <img src="<%=movie%>" class="Posters">
 <% }) %>

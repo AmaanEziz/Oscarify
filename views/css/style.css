@@ -59,7 +59,11 @@ h1 {
 	}
 	.Posters{
 		display: inline-block;
-		  margin-left:10%;
-		  margin-right:5%;
+		margin:40px;
 		border:5px solid #D4AF37;
+	}
+	#frontpage{
+
+		background-image:url("https://cdn.wallpapersafari.com/29/44/linm7I.jpg");
+		background-size:cover;
 	}
