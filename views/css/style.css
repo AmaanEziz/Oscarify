@@ -2,9 +2,10 @@ body {
 	font-family: 'Georgia', serif;
 	padding-bottom: 50px;
 	background-color:#111010; 
-	color: white
+	color: rgb(255, 214, 80)
 	}
 h1 {
+	text-align:center;
 	color:  rgb(255, 214, 80);
 }
 	img{
@@ -58,12 +59,13 @@ h1 {
 		text-align: center;
 	}
 	.Posters{
-		display: inline-block;
-		margin:40px;
+		
+		margin-left:20%;
+		margin-right:20%;
 		border:5px solid #D4AF37;
 	}
 	#frontpage{
 
-		background-image:url("https://cdn.wallpapersafari.com/29/44/linm7I.jpg");
+		background-image:url("https://www.oscars.org/sites/all/themes/oscarbase/images/banner.ampas.jpg");
 		background-size:cover;
 	}

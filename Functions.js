@@ -113,7 +113,7 @@ function RandNum(){
 
 async function createRandPosters(){
     let posterList=[]
-    for (var i=0;i<4;i++){
+    for (var i=0;i<2;i++){
         let poster;
         while (!poster || poster=="N/A")
        { poster= await getDataAtIndex(RandNum()).then(data=>{return data.Poster});}
