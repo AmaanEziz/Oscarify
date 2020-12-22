@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const fetch = require("node-fetch");//Allows us to use node fetch
 const Oscars_record = require('./oscars.json');//Oscars file as a JSON array
 
 function format(word){/////Converts all input strings to uniform standard for ease in comparing data
@@ -13,7 +13,7 @@ const categoryList=(function createCategoryList()
     }
     return List;
 })();
-const titleList=(function createTitleList()
+const filmList=(function createFilmList()
 {
     var List=[];
     for (var i=0; i<Oscars_record.length;i++){
@@ -79,20 +79,20 @@ async function getDataAtIndex(index){//Merges Oscar data and OMDB field data int
 }
 
   
-async function getMovieList(title,category,year,winner){//Long function, returns List with given params
+async function getMovieList(film,category,year,winner){//Long function, returns List with given params
   let returnList=[];
-  let params=[title,category,year,winner];
+  let params=[film,category,year,winner];
   for (var i=0; i<params.length;i++){//converts unspecified parameter to empty string
       if (params[i]==null){params[i]=""}
       params[i]=format(params[i]);
   }
-  title=params[0];
+  film=params[0];
   category=params[1];
   year=params[2];
   winner=params[3];
   for (i=0;i<Oscars_record.length;i++){
     
-  if (titleList[i].includes(title) &&categoryList[i].includes(category)//Searches what movies include the criteria 
+  if (filmList[i].includes(film) &&categoryList[i].includes(category)//Searches what movies include the criteria 
 
       &&yearList[i].includes(year)&&winnerList[i].includes(winner)){
 
@@ -106,14 +106,14 @@ async function getMovieList(title,category,year,winner){//Long function, returns
 }
 
 
-function RandNum(){
+function RandNum(){//Generates a random number between 8000 and 1000
     let num=Math.floor(Math.random() * 2200)+8000;
     return num;
 }
 
-async function createRandPosters(){
+async function createRandPosters(){ //Returns a list of 4 random movie poster URLs
     let posterList=[]
-    for (var i=0;i<2;i++){
+    for (var i=0;i<4;i++){
         let poster;
         while (!poster || poster=="N/A")
        { poster= await getDataAtIndex(RandNum()).then(data=>{return data.Poster});}

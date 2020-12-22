@@ -39,8 +39,9 @@ h1 {
 
 		.container td:first-child, .container th:first-child {
 		padding-left: 20px;
+	
 		}
-
+		
 		.container td:last-child, .container th:last-child {
 		padding-right: 20px;
 		}
@@ -60,12 +61,12 @@ h1 {
 	}
 	.Posters{
 		
-		margin-left:20%;
-		margin-right:20%;
+		margin-left:5%;
+		margin-right:5%;
 		border:5px solid #D4AF37;
+	
 	}
 	#frontpage{
 
-		background-image:url("https://www.oscars.org/sites/all/themes/oscarbase/images/banner.ampas.jpg");
-		background-size:cover;
+		background-color:black;
 	}
