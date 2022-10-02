@@ -1,5 +1,5 @@
 # Oscars Movie Search Project CSC 131
-Purpose:This projects creates a front-end UI and restfulAPI that allows users to search for oscar nominated and oscar winning movies based on their name, category, ceremony year, and winner status. This project was created as part of a team in my Software Engineering CSC 131 course and demonstrates knowledge of nodeJS,html, bootstrap, css, API functionality, error handling, and, more broadly, full stack development. 
+Purpose: This project creates a front-end UI and restfulAPI that allows users to search for oscar nominated and oscar winning movies based on their name, category, ceremony year, and winner status. This project was created as part of a team in my Software Engineering CSC 131 course and demonstrates knowledge of nodeJS,html, bootstrap, css, API functionality, error handling, and, more broadly, full stack development. 
 
 
 Step To start and run this project: 
