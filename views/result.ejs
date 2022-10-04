@@ -35,20 +35,19 @@
 		<td class="align-middle"><%= movie.Plot %></td>
 		<td class="align-middle"><%= movie.year_film %></td>
 		<td class="align-middle"><%= movie.year_ceremony %></td>      
-		<td class="align-middle"><a href="<%= movie.IMDBReviewsLink %>">View on IMDB</a></td>
-		<td class="align-middle"><a href="<%= movie.StreamingLink %>">Watch Now</a></td>
+		<td class="align-middle"><a href="<%= movie.IMDBReviewsLink %>" target="_blank">View on IMDB</a></td>
 		<td class="align-middle"><%= movie.category %></td>
 		<td class="align-middle"><%= movie.winner %></td>
 	  </tr>
 	  <% }) } else {%>
-		  <h1 style="text-align:center; padding-top : 2.5%">Invalid Search, Please Try Again</h1>
+		  <h1 style="text-align:center; padding-top : 2.5%">No Records Found</h1>
 	  <% }%>
 
 	</table>
 	
 	<br/>
 	<div class="text-center">
-	 <a  href="/"><p class="btn btn-outline-warning "> Search Again!</p></a>
+	 <a  href="/"><p class="btn btn-outline-warning ">Back to Search</p></a>
 	</div>
 </div>
 </body>

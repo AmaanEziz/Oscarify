@@ -125,8 +125,19 @@ async function createRandPosters(){ //Returns a list of 4 random movie poster UR
     
 }
 
+function getDistinctCategories(){
+    let categories = Oscars_record.map(a => a.category);
+    let distinctCategories= [... new Set(categories)]
+    return distinctCategories.sort().filter(element=> element.length<30);
 
+}
+
+function getDistinctYears(){
+    let years = Oscars_record.map(a => a.year_ceremony);
+    let distinctYears= [... new Set(years)]
+    return distinctYears;
+}
 //Mod.exports needed in order to export the needed functions to different files
 module.exports={
-   getDataAtIndex,getMovieList,createRandPosters}
+   getDataAtIndex,getMovieList,createRandPosters, getDistinctCategories,getDistinctYears}
   

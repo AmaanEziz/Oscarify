@@ -4,17 +4,31 @@
 <body id="frontpage">
 <div class="container">
 	<br>
-	<h1 class ="text-center mt-4 p-4">Oscar Movie Search</h1>
+	<h1 class ="text-center mt-4 p-4">Oscar.io</h1>
 	<form action="/result" method="get">
 		<div class="form-group p-4 text-center">
 			<label for="Movie">Movie Name</label>
 			<input type="text" name="name" placeholder="Ex: Ted">
 			<label for="Movie">Category Name</label>
-			<input type="text" name="category" placeholder="Ex: Best Picture">
-			<label for="Movie">Year</label>
-			<input type="text" name="year" placeholder="Ex:2010">
-			<label for="Movie">Winner</label>
-			<input type="text" name="winner" placeholder="Ex: true">
+			<select name="category">
+				<option value="" class="Posters" ></option>
+				<% categories.forEach(function(category){ %>
+					<option value="<%=category%>" class="Posters" ><%=category%></option>
+				<% }) %>
+			  </select>
+			  <label for="Year">Awarded Year</label>
+			  <select name="year">
+				<option value="" class="Posters" ></option>
+				<% years.forEach(function(year){ %>
+					<option value="<%=year%>" class="Posters" ><%=year%></option>
+				<% }) %>
+			  </select>
+			<label for="Movie">Award Status</label>
+			<select name="winner">
+				<option value="" class="Posters"></option>
+				<option value="Winner" class="Posters" >Winner</option>
+				<option value="Nominee" class="Posters" >Nominee</option>
+			</select>
 		</div>
 		<div class="form-group">
 			<input class="btn btn-outline-warning btn-block" type="submit" value="Submit">
@@ -23,7 +37,7 @@
 </div>
 <br>
 <div class="d-flex justify-content-center">
-<% data.forEach(function(movie){ %>
+<% moviePosterURLs.forEach(function(movie){ %>
 <img src="<%=movie%>" class="Posters" alt="Poster">
 <% }) %>
 <div>
